@@ -11,6 +11,7 @@ import tkinter.filedialog
 import cv2
 import os
 import shutil
+from PIL import Image
 
 DEFAULT_ALPHA = 1.5
 DEFAULT_BETA = 10
@@ -57,11 +58,26 @@ class ImageEditorApp(App):
             # image_name = DEFAULT_IMAGE_NAME
 
         print(f"Image name: {image_name}")
+
         self.image = cv2.imread(image_name)
 
         # call convertScaleAbs function
         adjusted = cv2.convertScaleAbs(self.image, alpha=alpha, beta=beta)
+
+        width, height, channel = self.image.shape
+        print(f"width {width}, {type(width)}")
+        print(f"height {height}, {type(height)}")
+        top = int(height * (50 - self.root.ids.top_slider.value) / 50)
+        bottom = int(height - height * self.root.ids.bottom_slider.value / 50)
+        left = int(width * self.root.ids.left_slider.value / 50)
+        right = int(width - width * (100 - self.root.ids.right_slider.value) / 100)
+        print(top, bottom, left, right)
+
+        adjusted = adjusted[left:right, top:bottom]
         cv2.imwrite(image_name, adjusted)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+
         self.root.ids.img.source = image_name
 
     def select_directory(self):

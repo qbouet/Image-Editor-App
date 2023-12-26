@@ -44,17 +44,19 @@ BoxLayout:
                         size_hint_x: 0.05
                         id: top_slider
                         min: 0
-                        max: 100
+                        max: 50
                         step: 1
-                        value: 100
+                        value: 50
                         orientation: 'vertical'
+                        on_touch_down: app. display_image(False, False)
                     Slider:
                         size_hint_x: 0.05
                         id: bottom_slider
                         min: 0
-                        max: 100
+                        max: 49
                         step: 1
                         orientation: 'vertical'
+                        on_touch_down: app. display_image(False, False)
                 Image:
                     size_hint_x: 0.9
                     id: img
