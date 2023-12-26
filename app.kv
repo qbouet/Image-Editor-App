@@ -31,15 +31,50 @@ BoxLayout:
     BoxLayout:
         size_hint_x: 0.7
         orientation:'vertical'
-        Image:
+        BoxLayout:
             size_hint_y: 0.9
-            id: img
-            source:'apple.jpg'  #image source
-            allow_stretch: True
-            keep_ratio: True
+            orientation:'horizontal'
+            BoxLayout:
+                size_hint_x: 0.1
+                orientation:'vertical'
+                Slider:
+                    size_hint_x: 0.05
+                    id: top_slider
+                    min: 100
+                    max: 0
+                    step: 1
+                    orientation: 'vertical'
+                Slider:
+                    size_hint_x: 0.05
+                    id: bottom_slider
+                    min: 0
+                    max: 100
+                    step: 1
+                    orientation: 'vertical'
+            Image:
+                size_hint_x: 0.9
+                id: img
+                source:'default_image.jpg'  #image source
+                allow_stretch: True
+                keep_ratio: True
+        BoxLayout:
+            size_hint_y: 0.1
+            orientation:'horizontal'
+            Slider:
+                id: left_slider
+                min: 0
+                max: 100
+                step: 1
+                orientation: 'horizontal'
+            Slider:
+                id: right_slider
+                min: 100
+                max: 0
+                step: 1
+                orientation: 'horizontal'
         BoxLayout:
             orientation:'horizontal'
-            size_hint_y: 0.05
+            size_hint_y: 0.1
             Button:
                 text: "<"
                 on_press: app.display_image(True, False)
