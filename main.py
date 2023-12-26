@@ -12,8 +12,8 @@ import cv2
 import os
 import shutil
 
-DEFAULT_ALPHA = 1
-DEFAULT_BETA = 0
+DEFAULT_ALPHA = 1.5
+DEFAULT_BETA = 10
 APP_PATH = "C:/Users/cheva/OneDrive/Desktop/Image Editor App/"
 DEFAULT_IMAGE_NAME = "default_image.JPG"
 
@@ -28,6 +28,7 @@ class ImageEditorApp(App):
         self.image = cv2.imread(DEFAULT_IMAGE_NAME)
         self.images = self.select_directory()
         self.images_index = 0
+        self.last_images_index = 0
 
     def build(self):
         """Build the Kivy app from the kv file."""
@@ -48,8 +49,12 @@ class ImageEditorApp(App):
             elif next:
                 self.images_index += 1
             image_name = self.images[self.images_index]
+            self.last_images_index = self.images_index
         except IndexError:
-            image_name = DEFAULT_IMAGE_NAME
+            # remain on same image by reusing the last index
+            image_name = self.images[self.last_images_index]
+            self.images_index = self.last_images_index
+            # image_name = DEFAULT_IMAGE_NAME
 
         print(f"Image name: {image_name}")
         self.image = cv2.imread(image_name)
