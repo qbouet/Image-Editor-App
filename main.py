@@ -9,46 +9,70 @@ from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
 import tkinter.filedialog
 import cv2
+import os
+import shutil
 
-FILENAME = 'apple.jpg'
-DEFAULT_ALPHA = 1.5
-DEFAULT_BETA = 10
-
-
-def get_image():
-    """Get image"""
-    # read the input image
-    image = cv2.imread(FILENAME)
-    return image
+DEFAULT_ALPHA = 1
+DEFAULT_BETA = 0
+APP_PATH = "C:/Users/cheva/OneDrive/Desktop/Image Editor App/"
+DEFAULT_IMAGE_NAME = "default_image.JPG"
 
 
-class GraphingApp(App):
+class ImageEditorApp(App):
     """Image Editor App"""
-    average_label = StringProperty()
     status_label = StringProperty()
 
     def __init__(self, **kwargs):
         """Construct main app."""
         super().__init__(**kwargs)
-        self.image = get_image()
+        self.image = cv2.imread(DEFAULT_IMAGE_NAME)
+        self.images = self.select_directory()
+        self.images_index = 0
 
     def build(self):
         """Build the Kivy app from the kv file."""
         self.title = "Image Editor App"
         self.root = Builder.load_file('app.kv')
-        self.display_img()
+        self.display_image(False, False)
         return self.root
 
-    def display_img(self):
+    def display_image(self, back, next):
         """Display image"""
         # define the alpha and beta
         alpha = DEFAULT_ALPHA  # Contrast control
         beta = DEFAULT_BETA  # Brightness control
 
+        try:
+            if back:
+                self.images_index += -1
+            elif next:
+                self.images_index += 1
+            image_name = self.images[self.images_index]
+        except IndexError:
+            image_name = DEFAULT_IMAGE_NAME
+
+        print(f"Image name: {image_name}")
+        self.image = cv2.imread(image_name)
+
         # call convertScaleAbs function
         adjusted = cv2.convertScaleAbs(self.image, alpha=alpha, beta=beta)
-        cv2.imwrite(FILENAME, adjusted)
-        self.root.ids.img.source = FILENAME
+        cv2.imwrite(image_name, adjusted)
+        self.root.ids.img.source = image_name
+
+    def select_directory(self):
+        """Select directory with chosen images"""
+        # select directory
+        selected_path = tkinter.filedialog.askdirectory()
+        print(selected_path)
+
+        self.images = [f for f in os.listdir(selected_path) if '.jpg' in f.lower()]
+
+        for image in self.images:
+            new_path = APP_PATH + image
+            old_path = selected_path + "/" + image
+            shutil.copy(old_path, new_path)
+        print(self.images)
+        return self.images
 
     def clear_inputs(self):
         """Clear inputs"""
@@ -66,4 +90,4 @@ class GraphingApp(App):
 
 
 if __name__ == '__main__':
-    GraphingApp().run()
+    ImageEditorApp().run()

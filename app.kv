@@ -7,6 +7,10 @@ BoxLayout:
         size_hint_x: 0.2
         Button:
             size_hint_y: 0.1
+            text: 'Select images'
+            on_press: app.select_directory()
+        Button:
+            size_hint_y: 0.1
             text: 'Clear'
             on_press: app.clear_inputs()
         BoxLayout:
@@ -36,6 +40,12 @@ BoxLayout:
         BoxLayout:
             orientation:'horizontal'
             size_hint_y: 0.05
+            Button:
+                text: "<"
+                on_press: app.display_image(True, False)
+            Button:
+                text: ">"
+                on_press: app.display_image(False, True)
         BoxLayout:
             size_hint_y: 0.05
     BoxLayout:
