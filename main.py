@@ -44,6 +44,7 @@ class ImageEditorApp(App):
         alpha = DEFAULT_ALPHA  # Contrast control
         beta = DEFAULT_BETA  # Brightness control
 
+        # Change image according to arrow keys
         try:
             if back:
                 self.images_index += -1
@@ -64,6 +65,7 @@ class ImageEditorApp(App):
         # call convertScaleAbs function
         adjusted = cv2.convertScaleAbs(self.image, alpha=alpha, beta=beta)
 
+        # crop image according to slider positions
         width, height, channel = self.image.shape
         print(f"width {width}, {type(width)}")
         print(f"height {height}, {type(height)}")
